@@ -212,6 +212,8 @@ pytest -q
 ruff check .
 ```
 
+未配置 API Key 时使用本地降级回答。
+
 ## 已知限制
 
 - 未安装 ChromaDB 或 sentence-transformers 时，会使用 JSON 哈希向量库，适合演示和测试，但语义检索能力弱于真实 embedding。
