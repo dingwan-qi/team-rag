@@ -195,6 +195,8 @@ Swagger 文档地址：`http://127.0.0.1:8000/docs`
 - 成员 4：GraphRAG，分支 `feature/graphrag`
 - 成员 5：Agentic RAG 与系统集成，分支 `feature/agentic-integration`
 
+项目已经完成实现，五名成员只需要领取 `handoff/` 中对应交接包并提交自己的分支。提交教程见 [docs/member-submission-guide.md](docs/member-submission-guide.md)。
+
 ## Git 分支说明
 
 ```bash
@@ -212,10 +214,22 @@ pytest -q
 ruff check .
 ```
 
-未配置 API Key 时使用本地降级回答。
+测试不依赖 API Key；未配置 API Key 时使用本地降级回答。
+
+## 演示步骤
+
+课堂演示流程见 [docs/demo-script.md](docs/demo-script.md)，推荐先运行：
+
+```bash
+python scripts/init_project.py
+python scripts/build_index.py
+python scripts/build_graph.py
+python scripts/run_all.py
+```
 
 ## 已知限制
 
+- 本地降级回答只是根据检索片段组织答案，不等同真实大模型推理。
 - 未安装 ChromaDB 或 sentence-transformers 时，会使用 JSON 哈希向量库，适合演示和测试，但语义检索能力弱于真实 embedding。
 - 实体关系抽取使用轻量正则策略，可运行但精度有限。
 - `POST /api/chat/stream` 当前按字符流式返回最终文本，不是 token 级模型流。
@@ -223,6 +237,7 @@ ruff check .
 ## 后续改进方向
 
 - 接入专用 rerank 模型。
+- 改进中文实体关系抽取，加入 LLM 辅助抽取。
 - 增加用户级知识库隔离和权限控制。
 - 增加评估指标，如 Recall@K、MRR、引用准确率。
 - 增加 GitHub Pages 或 Docker 镜像发布流程。
