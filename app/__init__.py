@@ -1,0 +1,2 @@
+"""TeamRAG application package."""
+
