@@ -11,6 +11,8 @@ from app.services.chat_service import ChatService
 from app.services.document_service import DocumentService
 from app.services.evaluation_service import EvaluationService
 
+WEB_START = Path(__file__).resolve().parents[1] / "app" / "web" / "start.html"
+
 
 def test_api_upload_list_chat_and_health(tmp_path: Path) -> None:
     retriever = VectorRetriever(tmp_path / "chroma")
@@ -24,6 +26,15 @@ def test_api_upload_list_chat_and_health(tmp_path: Path) -> None:
     client = TestClient(app)
     health = client.get("/health")
     assert health.status_code == 200
+
+    home = client.get("/", follow_redirects=False)
+    assert home.status_code in {307, 308}
+    assert home.headers["location"] == "/web/start.html"
+
+    if WEB_START.exists():
+        web = client.get("/web/start.html")
+        assert web.status_code == 200
+        assert "课程资料智能问答" in web.text
 
     upload = client.post(
         "/api/documents/upload",

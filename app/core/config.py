@@ -39,6 +39,7 @@ class Settings:
     chroma_dir: Path
     upload_dir: Path
     graph_dir: Path
+    user_db_path: Path
     chunk_size: int = 700
     chunk_overlap: int = 120
     default_top_k: int = 4
@@ -48,6 +49,7 @@ class Settings:
         self.chroma_dir.mkdir(parents=True, exist_ok=True)
         self.upload_dir.mkdir(parents=True, exist_ok=True)
         self.graph_dir.mkdir(parents=True, exist_ok=True)
+        self.user_db_path.parent.mkdir(parents=True, exist_ok=True)
 
 
 def get_settings() -> Settings:
@@ -60,6 +62,7 @@ def get_settings() -> Settings:
         chroma_dir=_env_path("CHROMA_DIR", "./data/chroma"),
         upload_dir=_env_path("UPLOAD_DIR", "./data/uploads"),
         graph_dir=_env_path("GRAPH_DIR", "./data/graph"),
+        user_db_path=_env_path("USER_DB_PATH", "./data/teamrag_users.sqlite3"),
         chunk_size=int(os.getenv("CHUNK_SIZE", "700")),
         chunk_overlap=int(os.getenv("CHUNK_OVERLAP", "120")),
         default_top_k=int(os.getenv("DEFAULT_TOP_K", "4")),
@@ -70,4 +73,3 @@ def get_settings() -> Settings:
 
 
 settings = get_settings()
-

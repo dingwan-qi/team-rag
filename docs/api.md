@@ -2,6 +2,8 @@
 
 FastAPI 会自动生成 Swagger：`http://127.0.0.1:8000/docs`。
 
+新版 Web 前端入口：`http://127.0.0.1:8000`，实际静态文件位于 `/web/start.html` 和 `/web/qa-index.html`。
+
 ## 健康检查
 
 `GET /health`
@@ -48,6 +50,48 @@ FastAPI 会自动生成 Swagger：`http://127.0.0.1:8000/docs`。
 
 从当前索引中的文档块构建 NetworkX 图谱。
 
+## 用户注册
+
+`POST /api/auth/register`
+
+```json
+{
+  "username": "member5",
+  "password": "password123"
+}
+```
+
+返回登录 token 和用户信息。
+
+## 用户登录
+
+`POST /api/auth/login`
+
+```json
+{
+  "username": "member5",
+  "password": "password123"
+}
+```
+
+返回登录 token。后续需要用户记忆的接口，在请求头中加入：
+
+```text
+Authorization: Bearer <token>
+```
+
+## 当前用户
+
+`GET /api/auth/me`
+
+需要 `Authorization` 请求头。
+
+## 退出登录
+
+`POST /api/auth/logout`
+
+需要 `Authorization` 请求头。
+
 ## 问答
 
 `POST /api/chat`
@@ -62,6 +106,18 @@ FastAPI 会自动生成 Swagger：`http://127.0.0.1:8000/docs`。
 ```
 
 `rag_mode` 支持 `native`、`advanced`、`graph`、`agentic`。
+
+如果请求头携带有效 `Authorization: Bearer <token>`，系统会读取该用户最近聊天记忆辅助理解当前问题，并把本轮问答保存到用户记忆中。
+
+## 用户记忆
+
+`GET /api/memory`
+
+返回当前登录用户的历史聊天记忆。
+
+`DELETE /api/memory`
+
+清空当前登录用户的历史聊天记忆。
 
 ## 流式问答
 
@@ -81,4 +137,3 @@ FastAPI 会自动生成 Swagger：`http://127.0.0.1:8000/docs`。
 ```
 
 返回四种 RAG 模式的耗时、检索数量、引用数量和回答摘要。
-

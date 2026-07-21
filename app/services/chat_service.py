@@ -26,13 +26,41 @@ class ChatService:
         rag_mode: RAGMode = "native",
         top_k: int = 4,
         metadata_filter: dict[str, object] | None = None,
+        memory_context: list[str] | None = None,
     ) -> RAGResponse:
         if not query.strip():
             raise ValueError("问题不能为空")
+        effective_query = self._with_memory_context(query, memory_context or [])
         if rag_mode == "advanced":
-            return self.advanced.answer(query, top_k=top_k, metadata_filter=metadata_filter)
+            response = self.advanced.answer(
+                effective_query,
+                top_k=top_k,
+                metadata_filter=metadata_filter,
+            )
+            response.metadata["original_query"] = query
+            response.metadata["memory_used"] = bool(memory_context)
+            return response
         if rag_mode == "graph":
-            return self.graph.answer(query, top_k=top_k, metadata_filter=metadata_filter)
+            response = self.graph.answer(effective_query, top_k=top_k, metadata_filter=metadata_filter)
+            response.metadata["original_query"] = query
+            response.metadata["memory_used"] = bool(memory_context)
+            return response
         if rag_mode == "agentic":
-            return self.agentic.answer(query, top_k=top_k, metadata_filter=metadata_filter)
-        return self.native.answer(query, top_k=top_k, metadata_filter=metadata_filter)
+            response = self.agentic.answer(effective_query, top_k=top_k, metadata_filter=metadata_filter)
+            response.metadata["original_query"] = query
+            response.metadata["memory_used"] = bool(memory_context)
+            return response
+        response = self.native.answer(effective_query, top_k=top_k, metadata_filter=metadata_filter)
+        response.metadata["original_query"] = query
+        response.metadata["memory_used"] = bool(memory_context)
+        return response
+
+    def _with_memory_context(self, query: str, memory_context: list[str]) -> str:
+        if not memory_context:
+            return query
+        memory = "\n".join(memory_context[-8:])
+        return (
+            "以下是当前登录用户的历史对话记忆，用于理解指代和上下文，"
+            "不要把它当作课程资料证据：\n"
+            f"{memory}\n\n当前问题：{query}"
+        )
