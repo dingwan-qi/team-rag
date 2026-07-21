@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeamRAG 问答工作台</title>
+    <link rel="stylesheet" href="qa.css">
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="brand">
+            <div class="brand-mark">TR</div>
+            <div>
+                <h1>TeamRAG</h1>
+                <p>课程资料智能问答</p>
+            </div>
+        </div>
+
+        <nav class="nav">
+            <button class="nav-btn active" data-view="chat">智能问答</button>
+            <button class="nav-btn" data-view="knowledge">知识库</button>
+            <button class="nav-btn" data-view="graph">知识图谱</button>
+            <button class="nav-btn" data-view="evaluation">效果评估</button>
+        </nav>
+
+        <div class="control-group">
+            <label for="ragMode">RAG 模式</label>
+            <select id="ragMode">
+                <option value="agentic">自动选择</option>
+                <option value="native">Native RAG</option>
+                <option value="advanced">Advanced RAG</option>
+                <option value="graph">GraphRAG</option>
+            </select>
+        </div>
+        <div class="control-group">
+            <label for="topK">Top-K：<span id="topKLabel">4</span></label>
+            <input id="topK" type="range" min="1" max="10" value="4">
+        </div>
+
+        <div class="user-panel">
+            <span id="currentUser">未登录</span>
+            <button id="logoutBtn">退出</button>
+        </div>
+    </aside>
+
+    <main class="workspace">
+        <section class="view active" id="view-chat">
+            <header class="section-header">
+                <div>
+                    <h2>智能问答</h2>
+                    <p>登录用户的历史问答会持久保存，并参与下一轮上下文理解。</p>
+                </div>
+                <button class="ghost-btn" id="clearMemoryBtn">清空记忆</button>
+            </header>
+
+            <div class="chat-shell">
+                <div class="message-list" id="messageList"></div>
+                <form class="composer" id="chatForm">
+                    <input id="questionInput" type="text" placeholder="请输入课程资料相关问题" autocomplete="off">
+                    <button type="submit">发送</button>
+                </form>
+            </div>
+        </section>
+
+        <section class="view" id="view-knowledge">
+            <header class="section-header">
+                <div>
+                    <h2>知识库</h2>
+                    <p>上传课程资料后，系统会自动解析、分块并写入索引。</p>
+                </div>
+                <button class="ghost-btn" id="refreshDocsBtn">刷新列表</button>
+            </header>
+
+            <form class="upload-row" id="uploadForm">
+                <input id="fileInput" type="file" accept=".pdf,.docx,.txt,.md,.markdown">
+                <button type="submit">上传并索引</button>
+                <button type="button" id="buildIndexBtn">重建索引</button>
+            </form>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>文件名</th>
+                            <th>类型</th>
+                            <th>分块数</th>
+                            <th>状态</th>
+                        </tr>
+                    </thead>
+                    <tbody id="documentTable"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="view" id="view-graph">
+            <header class="section-header">
+                <div>
+                    <h2>知识图谱</h2>
+                    <p>基于课程资料抽取实体和关系，辅助解释概念之间的联系。</p>
+                </div>
+                <button class="ghost-btn" id="buildGraphBtn">构建图谱</button>
+            </header>
+
+            <div class="stats-row">
+                <div><strong id="nodeCount">0</strong><span>节点</span></div>
+                <div><strong id="edgeCount">0</strong><span>关系</span></div>
+            </div>
+            <div class="graph-grid">
+                <div>
+                    <h3>实体</h3>
+                    <div class="pill-list" id="nodeList"></div>
+                </div>
+                <div>
+                    <h3>关系</h3>
+                    <div class="edge-list" id="edgeList"></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="view" id="view-evaluation">
+            <header class="section-header">
+                <div>
+                    <h2>效果评估</h2>
+                    <p>输入多条测试问题，对四种 RAG 模式的回答、引用和耗时进行对比。</p>
+                </div>
+            </header>
+
+            <form class="evaluation-form" id="evaluationForm">
+                <textarea id="evaluationQuestions" rows="6" placeholder="每行一个问题，例如：&#10;RAG 的流程是什么？&#10;GraphRAG 有什么作用？"></textarea>
+                <button type="submit">开始评估</button>
+            </form>
+            <div class="evaluation-results" id="evaluationResults"></div>
+        </section>
+    </main>
+
+    <div class="toast" id="toast"></div>
+    <script src="qa.js"></script>
+</body>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>课程资料智能问答系统</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="start.css">
+</head>
+<body>
+    <!-- 背景层 -->
+    <div class="bg-image"></div>
+
+    <!-- 流光边框 -->
+    <div class="glow-border">
+        <span class="flow-bar flow-bar--top"></span>
+        <span class="flow-bar flow-bar--right"></span>
+        <span class="flow-bar flow-bar--bottom"></span>
+        <span class="flow-bar flow-bar--left"></span>
+    </div>
+
+    <!-- 花瓣粒子 -->
+    <div class="petals" id="petals"></div>
+
+    <!-- 主内容 -->
+    <div class="main-content" id="mainContent">
+        <!-- 左栏：标题 + 字幕（始终不动） -->
+        <div class="hero-left">
+            <div class="brand-area">
+                <h1 class="brand-title">课程资料智能问答</h1>
+                <p class="brand-tagline">AI 驱动的学习助手，让知识触手可及</p>
+            </div>
+            <div class="subtitle-area" id="subtitleArea">
+                <p class="subtitle-line">智能解析课程资料，秒速定位答案</p>
+                <p class="subtitle-line">支持 PDF / PPT / Word，多格式精准检索</p>
+            </div>
+        </div>
+
+        <!-- 右栏：按钮 → 登录卡片切换 -->
+        <div class="hero-right">
+            <div class="cta-section" id="ctaSection">
+                <button class="cta-button" id="ctaButton">
+                    <span>立即体验 <i class="fas fa-arrow-right"></i></span>
+                </button>
+            </div>
+
+            <div class="login-card" id="loginCard">
+                <div class="card-header">
+                    <i class="fas fa-user-circle"></i>
+                    <h3>欢迎回来</h3>
+                    <p>登录以继续使用智能问答</p>
+                </div>
+                <div class="auth-message" id="authMessage"></div>
+                <form class="card-form" id="loginForm">
+                    <div class="input-group">
+                        <i class="fas fa-user"></i>
+                        <input id="loginUsername" type="text" placeholder="请输入账号" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-lock"></i>
+                        <input id="loginPassword" type="password" placeholder="请输入密码" required>
+                    </div>
+                    <div class="form-options">
+                        <label class="remember-me">
+                            <input type="checkbox"> 记住我
+                        </label>
+                        <a href="#" class="forgot-pwd" id="forgotPwd">忘记密码？</a>
+                    </div>
+                    <button type="submit" class="login-btn">
+                        <span>登 录</span>
+                        <i class="fas fa-sign-in-alt"></i>
+                    </button>
+                    <p class="register-hint">
+                        还没有账号？<a href="#" id="showRegister">立即注册</a>
+                    </p>
+                </form>
+                <form class="card-form hidden" id="registerForm">
+                    <div class="input-group">
+                        <i class="fas fa-user"></i>
+                        <input id="registerUsername" type="text" placeholder="设置账号：3-32位字母数字" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-lock"></i>
+                        <input id="registerPassword" type="password" placeholder="设置密码：至少6位" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-check-circle"></i>
+                        <input id="registerConfirm" type="password" placeholder="再次输入密码" required>
+                    </div>
+                    <button type="submit" class="login-btn">
+                        <span>注 册</span>
+                        <i class="fas fa-user-plus"></i>
+                    </button>
+                    <p class="register-hint">
+                        已有账号？<a href="#" id="showLogin">返回登录</a>
+                    </p>
+                </form>
+                <button class="back-btn" id="backBtn">
+                    <i class="fas fa-arrow-left"></i> 返回
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="start.js"></script>
+</body>
+</html>
