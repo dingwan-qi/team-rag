@@ -1,8 +1,10 @@
 # TeamRAG：多源课程资料智能问答平台
 
-TeamRAG 是一个五人协作课程项目，用 Streamlit 提供中文 WebUI，用 FastAPI 提供后端接口，支持上传 PDF、DOCX、TXT、Markdown 课程资料，完成解析、分块、索引、检索、RAG 问答、GraphRAG 和 Agentic RAG 演示。
+TeamRAG 是一个五人协作课程项目，用静态 Web 前端提供中文问答工作台，用 FastAPI 提供后端接口，支持上传 PDF、DOCX、TXT、Markdown 课程资料，完成解析、分块、索引、检索、RAG 问答、GraphRAG 和 Agentic RAG 演示。项目也保留 Streamlit 页面作为备用演示入口。
 
 项目优先保证本地可运行：没有 API Key、没有下载 embedding 模型或没有 ChromaDB 时，会自动使用本地哈希向量索引和降级回答；配置 OpenAI Compatible API 后可切换为真实大模型回答。
+
+系统已加入用户注册、登录和用户级聊天记忆持久化。登录后，聊天页会恢复该用户历史问答，并把新问答保存到本地 SQLite 用户库。
 
 ## 功能截图
 
@@ -93,8 +95,10 @@ app/rag              Native/Advanced/Graph/Agentic RAG
 app/graph            实体抽取、图谱构建、存储和检索
 app/agents           LangGraph 工作流
 app/services         服务层
+app/web              新版静态 Web 前端：首页、登录注册和问答工作台
 app/ui               Streamlit 页面和组件
 data                 上传文件、索引、图谱和样例资料
+data/teamrag_users.sqlite3 用户账号、登录会话和聊天记忆
 scripts              初始化、构建索引、构建图谱和一键启动
 tests                pytest 测试
 docs                 架构、API、Git 流程、演示和五人任务文档
@@ -139,6 +143,7 @@ LLM_MODEL=
 EMBEDDING_MODEL=BAAI/bge-small-zh-v1.5
 CHROMA_DIR=./data/chroma
 UPLOAD_DIR=./data/uploads
+USER_DB_PATH=./data/teamrag_users.sqlite3
 ```
 
 兼容 OpenAI、DeepSeek、通义千问等 OpenAI Compatible API。`LLM_BASE_URL` 可填服务地址，例如 `https://api.openai.com/v1` 或其他兼容服务的 `/v1` 地址。
@@ -159,7 +164,15 @@ python scripts/build_graph.py
 uvicorn app.api.main:app --reload --port 8000
 ```
 
-启动 Streamlit：
+新版前端地址：
+
+```text
+http://127.0.0.1:8000
+```
+
+打开后会进入开始页，点击“立即体验”后可注册或登录，登录成功后进入问答工作台。
+
+备用 Streamlit 页面：
 
 ```bash
 streamlit run app/ui/streamlit_app.py
@@ -181,8 +194,14 @@ Swagger 文档地址：`http://127.0.0.1:8000/docs`
 - `DELETE /api/documents/{document_id}`
 - `POST /api/knowledge-base/index`
 - `POST /api/knowledge-base/graph`
+- `POST /api/auth/register`
+- `POST /api/auth/login`
+- `GET /api/auth/me`
+- `POST /api/auth/logout`
 - `POST /api/chat`
 - `POST /api/chat/stream`
+- `GET /api/memory`
+- `DELETE /api/memory`
 - `POST /api/evaluate`
 
 详细字段见 [docs/api.md](docs/api.md)。
@@ -194,6 +213,8 @@ Swagger 文档地址：`http://127.0.0.1:8000/docs`
 - 成员 3：Native RAG 与 Advanced RAG，分支 `feature/native-advanced-rag`
 - 成员 4：GraphRAG，分支 `feature/graphrag`
 - 成员 5：Agentic RAG 与系统集成，分支 `feature/agentic-integration`
+
+项目已经完成实现，五名成员只需要领取 `handoff/` 中对应交接包并提交自己的分支。提交教程见 [docs/member-submission-guide.md](docs/member-submission-guide.md)。
 
 ## Git 分支说明
 
@@ -212,10 +233,22 @@ pytest -q
 ruff check .
 ```
 
-未配置 API Key 时使用本地降级回答。
+测试不依赖 API Key；未配置 API Key 时使用本地降级回答。
+
+## 演示步骤
+
+课堂演示流程见 [docs/demo-script.md](docs/demo-script.md)，推荐先运行：
+
+```bash
+python scripts/init_project.py
+python scripts/build_index.py
+python scripts/build_graph.py
+python scripts/run_all.py
+```
 
 ## 已知限制
 
+- 本地降级回答只是根据检索片段组织答案，不等同真实大模型推理。
 - 未安装 ChromaDB 或 sentence-transformers 时，会使用 JSON 哈希向量库，适合演示和测试，但语义检索能力弱于真实 embedding。
 - 实体关系抽取使用轻量正则策略，可运行但精度有限。
 - `POST /api/chat/stream` 当前按字符流式返回最终文本，不是 token 级模型流。
@@ -223,6 +256,7 @@ ruff check .
 ## 后续改进方向
 
 - 接入专用 rerank 模型。
-- 增加用户级知识库隔离和权限控制。
+- 改进中文实体关系抽取，加入 LLM 辅助抽取。
+- 完善用户级知识库隔离、角色权限控制和密码找回流程。
 - 增加评估指标，如 Recall@K、MRR、引用准确率。
 - 增加 GitHub Pages 或 Docker 镜像发布流程。
