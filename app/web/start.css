@@ -1,0 +1,792 @@
+/* ============================================
+   课程资料智能问答系统 — 开始界面
+   暖白水墨风 + 浅金流光
+   ============================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700;900&family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* ---- CSS 变量 ---- */
+:root {
+    --glow-warm: #f0d89c;
+    --glow-bright: #fce8b8;
+    --glow-soft: #fdf2d8;
+    --glow-dim: rgba(240, 216, 156, 0.35);
+    --text-primary: #fefefe;
+    --text-secondary: #e8e0d5;
+    --text-muted: #bfb8a8;
+    --card-bg: #fffefb;
+    --card-text: #3d3428;
+    --card-sub: #8a7e6e;
+    --accent: #c8924b;
+    --accent-hover: #dba860;
+    --frost-bg: rgba(255, 253, 248, 0.12);
+    --frost-border: rgba(255, 253, 248, 0.25);
+    --shadow-soft: 0 8px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* ---- 基础重置 ---- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Noto Serif SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    color: var(--text-primary);
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+/* ============================================
+   背景图片
+   ============================================ */
+.bg-image {
+    position: fixed;
+    inset: -10px;
+    background: url('photo/start.png') center/cover no-repeat;
+    filter: brightness(1.02) saturate(1.05);
+    z-index: 0;
+}
+
+/* 背景上覆一层极淡的暖光 */
+.bg-image::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+        ellipse at 50% 45%,
+        rgba(255, 248, 235, 0.15) 0%,
+        rgba(255, 240, 220, 0.05) 40%,
+        transparent 70%
+    );
+    pointer-events: none;
+}
+
+/* ============================================
+   流光边框 — 浅白暖金
+   ============================================ */
+.glow-border {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1000;
+}
+
+.flow-bar {
+    position: absolute;
+    display: block;
+    pointer-events: none;
+}
+
+/* 顶边 */
+.flow-bar--top {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        transparent 25%,
+        rgba(255, 248, 230, 0.5) 42%,
+        var(--glow-bright) 50%,
+        rgba(255, 248, 230, 0.5) 58%,
+        transparent 75%,
+        transparent 100%
+    );
+    background-size: 200% 100%;
+    animation: flowHorizontal 3.5s linear infinite;
+    box-shadow:
+        0 0 6px var(--glow-dim),
+        0 0 18px rgba(240, 216, 156, 0.2);
+}
+
+/* 右边 */
+.flow-bar--right {
+    top: 0;
+    right: 0;
+    width: 2px;
+    height: 100%;
+    background: linear-gradient(
+        180deg,
+        transparent 0%,
+        transparent 25%,
+        rgba(255, 248, 230, 0.5) 42%,
+        var(--glow-bright) 50%,
+        rgba(255, 248, 230, 0.5) 58%,
+        transparent 75%,
+        transparent 100%
+    );
+    background-size: 100% 200%;
+    animation: flowVertical 3.5s linear infinite;
+    animation-delay: 0.875s;
+    box-shadow:
+        0 0 6px var(--glow-dim),
+        0 0 18px rgba(240, 216, 156, 0.2);
+}
+
+/* 底边 */
+.flow-bar--bottom {
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(
+        270deg,
+        transparent 0%,
+        transparent 25%,
+        rgba(255, 248, 230, 0.5) 42%,
+        var(--glow-bright) 50%,
+        rgba(255, 248, 230, 0.5) 58%,
+        transparent 75%,
+        transparent 100%
+    );
+    background-size: 200% 100%;
+    animation: flowHorizontalReverse 3.5s linear infinite;
+    animation-delay: 1.75s;
+    box-shadow:
+        0 0 6px var(--glow-dim),
+        0 0 18px rgba(240, 216, 156, 0.2);
+}
+
+/* 左边 */
+.flow-bar--left {
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 100%;
+    background: linear-gradient(
+        0deg,
+        transparent 0%,
+        transparent 25%,
+        rgba(255, 248, 230, 0.5) 42%,
+        var(--glow-bright) 50%,
+        rgba(255, 248, 230, 0.5) 58%,
+        transparent 75%,
+        transparent 100%
+    );
+    background-size: 100% 200%;
+    animation: flowVerticalReverse 3.5s linear infinite;
+    animation-delay: 2.625s;
+    box-shadow:
+        0 0 6px var(--glow-dim),
+        0 0 18px rgba(240, 216, 156, 0.2);
+}
+
+@keyframes flowHorizontal {
+    0%   { background-position: 150% 0; }
+    100% { background-position: -50% 0; }
+}
+
+@keyframes flowVertical {
+    0%   { background-position: 0 150%; }
+    100% { background-position: 0 -50%; }
+}
+
+@keyframes flowHorizontalReverse {
+    0%   { background-position: -50% 0; }
+    100% { background-position: 150% 0; }
+}
+
+@keyframes flowVerticalReverse {
+    0%   { background-position: 0 -50%; }
+    100% { background-position: 0 150%; }
+}
+
+/* ============================================
+   花瓣粒子
+   ============================================ */
+.petals {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.petal {
+    position: absolute;
+    border-radius: 50% 0 50% 0;
+    animation: petalFall linear infinite;
+    opacity: 0;
+    filter: blur(0.3px);
+    pointer-events: none;
+}
+
+@keyframes petalFall {
+    0% {
+        transform: translateY(0) translateX(0) rotate(0deg) scale(1);
+        opacity: 0;
+    }
+    5% {
+        opacity: 0.9;
+    }
+    85% {
+        opacity: 0.7;
+    }
+    100% {
+        transform: translateY(105vh) translateX(90px) rotate(360deg) scale(0.3);
+        opacity: 0;
+    }
+}
+
+/* ============================================
+   主内容区
+   ============================================ */
+.main-content {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 80px;
+    padding: 0 6%;
+}
+
+/* 暗色文字衬底 */
+.main-content::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+        ellipse at 50% 45%,
+        rgba(30, 20, 10, 0.2) 0%,
+        rgba(20, 12, 5, 0.08) 50%,
+        transparent 75%
+    );
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* ---- 左栏：标题 + 字幕（始终不动） ---- */
+.hero-left {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    text-align: left;
+    flex: 0 0 auto;
+    margin-right: auto;
+    padding-left: 2%;
+}
+
+/* ---- 右栏：按钮 / 登录卡片 ---- */
+.hero-right {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    min-width: 360px;
+    margin-right: 40px;
+}
+
+/* ---- 品牌标题 ---- */
+.brand-area {
+    text-align: left;
+}
+
+.brand-title {
+    font-size: 3.6rem;
+    font-weight: 900;
+    letter-spacing: 8px;
+    color: #ffffff;
+    margin-bottom: 12px;
+    text-shadow:
+        0 0 30px rgba(255, 245, 225, 0.55),
+        0 0 70px rgba(255, 235, 200, 0.3),
+        0 2px 6px rgba(0, 0, 0, 0.45);
+    animation: titleFadeIn 1s ease-out forwards;
+    opacity: 0;
+}
+
+.brand-tagline {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #f5efe0;
+    letter-spacing: 4px;
+    text-shadow: 0 0 20px rgba(255, 240, 210, 0.35);
+    animation: titleFadeIn 1s ease-out 0.2s forwards;
+    opacity: 0;
+}
+
+@keyframes titleFadeIn {
+    from {
+        transform: translateY(-24px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* ---- 动态字幕（打字机效果） ---- */
+.subtitle-area {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    margin: 28px 0 0;
+}
+
+.subtitle-line {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #d5cfc0;
+    letter-spacing: 2px;
+    white-space: nowrap;
+    opacity: 0;
+}
+
+.subtitle-line.visible {
+    opacity: 1;
+    color: #ffffff;
+    text-shadow:
+        0 0 20px rgba(255, 245, 220, 0.45),
+        0 0 50px rgba(255, 235, 200, 0.2);
+}
+
+.subtitle-line .cursor {
+    display: inline-block;
+    width: 2px;
+    height: 1.1em;
+    background: rgba(255, 245, 220, 0.8);
+    margin-left: 2px;
+    vertical-align: text-bottom;
+    animation: cursorBlink 0.7s step-end infinite;
+}
+
+@keyframes cursorBlink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+/* ---- CTA 按钮 ---- */
+.cta-section {
+    transition: all 0.45s ease;
+}
+
+.cta-section.fading {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(10px);
+}
+
+.cta-button {
+    position: relative;
+    padding: 20px 60px;
+    font-size: 1.5rem;
+    font-weight: 700;
+    font-family: inherit;
+    letter-spacing: 6px;
+    color: #fff9ed;
+    background: rgba(180, 130, 60, 0.18);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.35);
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+    box-shadow:
+        0 0 30px rgba(240, 180, 80, 0.18),
+        0 0 60px rgba(220, 160, 60, 0.08),
+        0 8px 32px rgba(0, 0, 0, 0.25);
+    outline: none;
+    text-shadow: 0 0 12px rgba(255, 220, 150, 0.4);
+}
+
+.cta-button span {
+    position: relative;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.cta-button i {
+    font-size: 1.2rem;
+    transition: transform 0.4s ease;
+}
+
+/* 按钮光晕 */
+.cta-button::before {
+    content: '';
+    position: absolute;
+    top: var(--btn-y, 50%);
+    left: var(--btn-x, 50%);
+    transform: translate(-50%, -50%);
+    width: 260px;
+    height: 260px;
+    background: radial-gradient(
+        circle,
+        rgba(255, 210, 120, 0.35) 0%,
+        rgba(240, 180, 80, 0.15) 30%,
+        transparent 65%
+    );
+    opacity: 0;
+    transition: opacity 0.4s;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.cta-button::after {
+    content: '';
+    position: absolute;
+    top: 1px;
+    left: 1px;
+    right: 1px;
+    bottom: 1px;
+    background: rgba(40, 25, 5, 0.3);
+    border-radius: 49px;
+    z-index: 1;
+}
+
+.cta-button:hover {
+    color: #fffef8;
+    border-color: rgba(255, 255, 255, 0.6);
+    transform: translateY(-3px) scale(1.03);
+    box-shadow:
+        0 0 45px rgba(240, 180, 60, 0.35),
+        0 0 80px rgba(220, 150, 40, 0.15),
+        0 16px 48px rgba(0, 0, 0, 0.3);
+    text-shadow: 0 0 24px rgba(255, 220, 140, 0.6);
+}
+
+.cta-button:hover::before {
+    opacity: 1;
+}
+
+.cta-button:hover i {
+    transform: translateX(5px);
+}
+
+.cta-button:active {
+    transform: translateY(-1px) scale(1.01);
+}
+
+/* ---- 登录卡片 ---- */
+.login-card {
+    position: absolute;
+    width: 380px;
+    background: var(--card-bg);
+    border-radius: 16px;
+    padding: 30px 26px 24px;
+    box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.3),
+        0 0 0 1px rgba(0, 0, 0, 0.06);
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+    pointer-events: none;
+    transition: all 0.55s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.login-card.visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+}
+
+/* 卡片头部 */
+.card-header {
+    text-align: center;
+    margin-bottom: 18px;
+}
+
+.card-header i {
+    font-size: 2.6rem;
+    color: var(--accent);
+    margin-bottom: 6px;
+    display: block;
+}
+
+.card-header h3 {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--card-text);
+    margin-bottom: 4px;
+}
+
+.card-header p {
+    font-size: 0.85rem;
+    color: var(--card-sub);
+}
+
+/* 表单 */
+.card-form {
+    display: flex;
+    flex-direction: column;
+    gap: 13px;
+}
+
+.card-form.hidden {
+    display: none;
+}
+
+.auth-message {
+    min-height: 20px;
+    margin: -4px 0 10px;
+    font-size: 0.86rem;
+    line-height: 1.4;
+    color: #a6733a;
+    text-align: center;
+}
+
+.auth-message.error {
+    color: #b94a48;
+}
+
+.auth-message.success {
+    color: #5d7a4b;
+}
+
+.input-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-group i {
+    position: absolute;
+    left: 14px;
+    font-size: 0.9rem;
+    color: #b8a898;
+    pointer-events: none;
+    transition: color 0.3s;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px 14px 12px 40px;
+    font-size: 0.95rem;
+    font-family: inherit;
+    color: var(--card-text);
+    background: #f9f6f0;
+    border: 1.5px solid #e8e0d5;
+    border-radius: 10px;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.input-group input:focus {
+    border-color: var(--accent);
+    background: #fff;
+    box-shadow: 0 0 0 4px rgba(200, 146, 75, 0.08);
+}
+
+.input-group:focus-within i {
+    color: var(--accent);
+}
+
+.form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.82rem;
+}
+
+.remember-me {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: var(--card-sub);
+    cursor: pointer;
+}
+
+.remember-me input[type="checkbox"] {
+    accent-color: var(--accent);
+}
+
+.forgot-pwd {
+    color: var(--accent);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.forgot-pwd:hover {
+    color: var(--accent-hover);
+    text-decoration: underline;
+}
+
+/* 登录按钮 */
+.login-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    font-family: inherit;
+    letter-spacing: 4px;
+    color: #fff;
+    background: linear-gradient(135deg, #c8924b 0%, #a6733a 100%);
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 16px rgba(200, 146, 75, 0.3);
+}
+
+.login-btn:hover {
+    background: linear-gradient(135deg, #dba860 0%, #c8924b 100%);
+    box-shadow: 0 6px 22px rgba(200, 146, 75, 0.45);
+    transform: translateY(-2px);
+}
+
+.login-btn:active {
+    transform: translateY(0);
+}
+
+.login-btn:disabled {
+    cursor: wait;
+    opacity: 0.75;
+    transform: none;
+}
+
+/* 注册提示 */
+.register-hint {
+    text-align: center;
+    font-size: 0.83rem;
+    color: var(--card-sub);
+    margin-top: 2px;
+}
+
+.register-hint a {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.register-hint a:hover {
+    color: var(--accent-hover);
+    text-decoration: underline;
+}
+
+/* ---- 返回按钮 ---- */
+.back-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 16px auto 0;
+    padding: 10px 26px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    font-family: inherit;
+    letter-spacing: 2px;
+    color: var(--card-sub);
+    background: #f5f2eb;
+    border: 1px solid #e8e0d5;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.back-btn:hover {
+    color: var(--card-text);
+    background: #ede8dd;
+    border-color: #d5ccbb;
+}
+
+.back-btn i {
+    transition: transform 0.3s;
+}
+
+.back-btn:hover i {
+    transform: translateX(-3px);
+}
+
+/* ============================================
+   响应式
+   ============================================ */
+@media (max-width: 768px) {
+    .main-content {
+        flex-direction: column;
+        gap: 40px;
+        padding: 40px 6%;
+    }
+
+    .hero-left {
+        align-items: center;
+        text-align: center;
+    }
+
+    .subtitle-area {
+        align-items: center;
+    }
+
+    .hero-right {
+        min-width: 0;
+    }
+
+    .brand-title {
+        font-size: 2.2rem;
+        letter-spacing: 4px;
+    }
+
+    .brand-tagline {
+        font-size: 0.9rem;
+        letter-spacing: 2px;
+    }
+
+    .subtitle-line {
+        font-size: 0.9rem;
+        letter-spacing: 1px;
+    }
+
+    .cta-button {
+        padding: 14px 40px;
+        font-size: 1.15rem;
+        letter-spacing: 4px;
+    }
+
+    .login-card {
+        width: 320px;
+        padding: 24px 20px 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .brand-title {
+        font-size: 1.6rem;
+        letter-spacing: 3px;
+    }
+
+    .cta-button {
+        padding: 12px 30px;
+        font-size: 1rem;
+        letter-spacing: 3px;
+    }
+
+    .login-card {
+        width: 280px;
+        padding: 20px 16px 16px;
+    }
+}
+
+/* 减少动画偏好 */
+@media (prefers-reduced-motion: reduce) {
+    .flow-bar,
+    .petal {
+        animation-duration: 0.01ms !important;
+    }
+
+    .cta-button,
+    .login-card,
+    .back-btn,
+    .brand-area,
+    .subtitle-area,
+    .cta-section {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+    }
+}
