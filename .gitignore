@@ -12,6 +12,7 @@ htmlcov/
 data/uploads/*
 data/chroma/*
 data/graph/*
+data/*.sqlite3
 !data/uploads/.gitkeep
 !data/chroma/.gitkeep
 !data/graph/.gitkeep
